@@ -1,28 +1,37 @@
-name: 빌드 테스트
+name: lint and build test
 
-on:
-  pull_request:
-    branches:
-      - main
+on: pull_request
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x]
-
     steps:
       - uses: actions/checkout@v1
-      - name: Node.js ${{ matrix.node-version }}
+      - name: set node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install, build and test
-        run: |
-          npm install
-          npm run lint
-          npm run build
-        env:
-          CI: true
+      - name: install dependencies
+        run: npm install
+      - name: run lint
+        run: npm run lint
+
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install dependencies
+        run: npm install
+      - name: run build
+        run: npm run build
