@@ -6,6 +6,9 @@ function Layout() {
       <nav>
         <ul>
           <li>
+            <Link to={'/signin'}>시작하기</Link>
+          </li>
+          <li>
             <Link to={'/buckets'}>마이 버킷</Link>
           </li>
           <li>
