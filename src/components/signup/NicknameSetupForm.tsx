@@ -6,6 +6,7 @@ interface NicknameSetupProps {
   title: string
   buttonText: string
   children?: React.ReactNode
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
 function NicknameSetupForm({
@@ -14,6 +15,7 @@ function NicknameSetupForm({
   title,
   buttonText,
   children,
+  handleSubmit,
 }: NicknameSetupProps) {
   const [isNicknameValid, setIsNicknameValid] = useState(true)
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,7 @@ function NicknameSetupForm({
   }
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <p>{title}</p>
         <label>
           닉네임
