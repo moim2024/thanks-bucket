@@ -5,6 +5,8 @@ import reportWebVitals from '@/reportWebVitals'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import ErrorPage from './components/shared/RouteError'
 import Layout from './components/shared/Layout'
+import SignIn from './pages/SignIn'
+import AnonymousSignInPage from './pages/AnonymousSignIn'
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,14 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: 'signin',
+        element: <SignIn />,
+      },
+      {
+        path: 'signin/nickname',
+        element: <AnonymousSignInPage />,
+      },
       {
         path: 'buckets',
         element: (
