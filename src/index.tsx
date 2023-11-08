@@ -7,6 +7,7 @@ import ErrorPage from './components/shared/RouteError'
 import Layout from './components/shared/Layout'
 import SignIn from './pages/SignIn'
 import AnonymousSignInPage from './pages/AnonymousSignIn'
+import SignOut from './components/shared/SignOut'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
         element: (
           <div>
             <span>Buckets</span>
+            <SignOut />
           </div>
         ),
       },
