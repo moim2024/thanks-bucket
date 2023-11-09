@@ -25,6 +25,7 @@ function AnonymousSignInPage() {
 
         const userData = {
           displayName: user.displayName,
+          level: 0,
         }
 
         await setDoc(
