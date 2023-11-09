@@ -3,22 +3,19 @@ import { useState } from 'react'
 import { REGEX } from '@/constants'
 
 interface NicknameSetupProps {
-  nickname: string
-  setNickname: React.Dispatch<React.SetStateAction<string>>
   title: string
   buttonText: string
   children?: React.ReactNode
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  handleSubmit: (nickname: string) => void
 }
 
 function NicknameSetupForm({
-  nickname,
-  setNickname,
   title,
   buttonText,
   children,
   handleSubmit,
 }: NicknameSetupProps) {
+  const [nickname, setNickname] = useState('')
   const [isNicknameValid, setIsNicknameValid] = useState(true)
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = REGEX.NICKNAME
@@ -28,6 +25,7 @@ function NicknameSetupForm({
       setNickname(inputValue)
       setIsNicknameValid(true)
     } else {
+      setNickname(inputValue)
       setIsNicknameValid(false)
     }
   }
@@ -35,9 +33,15 @@ function NicknameSetupForm({
   const handleBlur = () => {
     setIsNicknameValid(true)
   }
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    handleSubmit(nickname)
+  }
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <p>{title}</p>
         <label>
           닉네임

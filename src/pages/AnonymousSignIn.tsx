@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { signInAnonymously, updateProfile } from '@firebase/auth'
 import { setDoc, doc, collection } from '@firebase/firestore'
 import { useNavigate } from 'react-router'
@@ -9,12 +7,9 @@ import { COLLECTIONS } from '@/constants'
 import NicknameSetupForm from '@/components/signup/NicknameSetupForm'
 
 function AnonymousSignInPage() {
-  const [nickname, setNickname] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
+  const handleSubmit = async (nickname: string) => {
     if (nickname) {
       try {
         const { user } = await signInAnonymously(auth)
@@ -44,8 +39,6 @@ function AnonymousSignInPage() {
 
   return (
     <NicknameSetupForm
-      nickname={nickname}
-      setNickname={setNickname}
       handleSubmit={handleSubmit}
       title="닉네임을 입력해주세요"
       buttonText="시작하기"
