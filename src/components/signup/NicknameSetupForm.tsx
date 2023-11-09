@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { REGEX } from '@/constants'
+
 interface NicknameSetupProps {
   nickname: string
   setNickname: React.Dispatch<React.SetStateAction<string>>
@@ -19,7 +21,7 @@ function NicknameSetupForm({
 }: NicknameSetupProps) {
   const [isNicknameValid, setIsNicknameValid] = useState(true)
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]*$/
+    const regex = REGEX.NICKNAME
     const inputValue = e.target.value
 
     if (regex.test(inputValue)) {
