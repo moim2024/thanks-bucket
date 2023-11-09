@@ -5,6 +5,7 @@ import reportWebVitals from '@/reportWebVitals'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import ErrorPage from './components/shared/RouteError'
 import Layout from './components/shared/Layout'
+import HomePage from './pages/Home'
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: '',
+        element: <HomePage />,
+      },
       {
         path: 'buckets',
         element: (
