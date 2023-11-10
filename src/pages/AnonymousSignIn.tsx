@@ -10,30 +10,23 @@ function AnonymousSignInPage() {
   const navigate = useNavigate()
 
   const handleSubmit = async (nickname: string) => {
-    if (nickname) {
-      try {
-        const { user } = await signInAnonymously(auth)
+    try {
+      const { user } = await signInAnonymously(auth)
 
-        await updateProfile(user, {
-          displayName: nickname,
-        })
+      await updateProfile(user, {
+        displayName: nickname,
+      })
 
-        const userData = {
-          displayName: user.displayName,
-          level: 0,
-        }
-
-        await setDoc(
-          doc(collection(store, COLLECTIONS.USER), user.uid),
-          userData,
-        )
-
-        navigate('/buckets')
-      } catch (error) {
-        console.error('로그인 실패', error)
+      const userData = {
+        displayName: user.displayName,
+        level: 0,
       }
-    } else {
-      console.error('한글, 영어 대소문자, 숫자만 가능합니다')
+
+      await setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), userData)
+
+      navigate('/buckets')
+    } catch (error) {
+      console.error('로그인 실패', error)
     }
   }
 
