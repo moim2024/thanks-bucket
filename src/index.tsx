@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn'
 import AnonymousSignInPage from './pages/AnonymousSignIn'
 import SignOut from './components/shared/SignOut'
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+
         path: 'signin',
         element: <SignIn />,
       },
@@ -24,6 +26,7 @@ const router = createBrowserRouter([
         element: <AnonymousSignInPage />,
       },
       {
+
         path: 'buckets',
         element: (
           <div>
