@@ -1,4 +1,4 @@
-name: Auto Assign Assignees and Reviewers
+name: Review Assign
 
 on:
   pull_request:
@@ -8,11 +8,7 @@ jobs:
   assign:
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ github.actor }} == 'limhizy15'
-        run: echo REVIEWERS=appear, uussong >> $GITHUB_ENV
-      - if: ${{ github.actor }} == 'uussong'
-        run: echo REVIEWERS=appear, limhizy15 >> $GITHUB_ENV
       - uses: hkusu/review-assign-action@v1
         with:
           assignees: ${{ github.actor }}
-          reviewers: ${{ env.REVIEWERS }}
+          reviewers: appear, limhizy15, uussong
