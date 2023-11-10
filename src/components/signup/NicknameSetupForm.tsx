@@ -17,15 +17,24 @@ function NicknameSetupForm({
   const [nickname, setNickname] = useState('')
   const [isTouched, setIsTouched] = useState(false)
 
-  const regex = REGEX.NICKNAME
-  const isNicknameValid = regex.test(nickname) || !isTouched
-  const isNull = isTouched && nickname === ''
-  const isFormValid = isNicknameValid && nickname
+  const validateNickname = (nickname: string) => {
+    const regex = REGEX.NICKNAME
+    if (!nickname.trim()) {
+      return { message: '닉네임을 반드시 입력해주세요!' }
+    }
+
+    if (!regex.test(nickname)) {
+      return { message: '한글 영어 대/소문자 숫자만 입력 가능해요!' }
+    }
+    return null
+  }
+
+  const validationResult = isTouched ? validateNickname(nickname) : null
+  const isFormValid = !validationResult && nickname
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
     setNickname(inputValue)
-    setIsTouched(true)
   }
 
   const handleBlur = () => {
@@ -34,7 +43,7 @@ function NicknameSetupForm({
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!isNicknameValid) return
+    if (validationResult) return
     handleSubmit(nickname)
     setIsTouched(false)
   }
@@ -52,10 +61,7 @@ function NicknameSetupForm({
             type="text"
             placeholder="한글 영어 대/소문자 숫자만 입력 가능해요!"
           />
-          {!isNicknameValid && (
-            <span>한글 영어 대/소문자 숫자만 입력 가능해요!</span>
-          )}
-          {isNull && <span>닉네임을 반드시 입력해주세요!</span>}
+          {validationResult && <span>{validationResult.message}</span>}
         </label>
 
         <div>
