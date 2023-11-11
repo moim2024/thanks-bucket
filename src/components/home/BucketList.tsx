@@ -1,6 +1,5 @@
 import { formatDate } from '@/utils/date'
-import ListRow from '../shared/ListRow'
-import ListRowText from '../shared/ListRowText'
+import ListItem from '../shared/ListRow'
 import { Bucket } from '@/models/bucket'
 
 // TODO: 희지 이 데이터는 더미 데이터로 firebase 연동을 마치면 삭제합니다.
@@ -41,7 +40,7 @@ function BucketList() {
   return (
     <section>
       {dummyBuckets.map((bucket) => (
-        <ListRow
+        <ListItem
           key={bucket.id}
           left={
             <img
@@ -52,7 +51,7 @@ function BucketList() {
           contents={
             <div>
               <span>{formatDate(new Date(bucket.dueDate))}</span>
-              <ListRowText text={bucket.title} />
+              <ListItem.ListItemText text={bucket.title} />
               {bucket.todos.map((todo) => (
                 <div key={todo.id}>
                   <span>{todo.title}</span>
