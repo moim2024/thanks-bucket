@@ -1,68 +1,63 @@
 import { formatDate } from '@/utils/date'
 import ListItem from '../shared/ListRow'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { getBuckets } from '@/remote/bucket'
+import { QuerySnapshot } from 'firebase/firestore'
 import { Bucket } from '@/models/bucket'
-
-// TODO: 희지 이 데이터는 더미 데이터로 firebase 연동을 마치면 삭제합니다.
-const dummyBuckets: Bucket[] = [
-  {
-    id: 0,
-    title: '한라산 등반',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
-    userID: 0,
-    thumbnailImageURL: 'http://via.placeholder.com/52x52',
-    todos: [
-      {
-        id: 1000,
-        title: '헬스하기',
-        isCompleted: false,
-      },
-    ],
-  },
-  {
-    id: 1,
-    title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
-    userID: 0,
-    thumbnailImageURL: 'http://via.placeholder.com/52x52',
-    todos: [
-      {
-        id: 1001,
-        title: '서점 방문',
-        isCompleted: true,
-      },
-    ],
-  },
-]
+import InfiniteScroll from 'react-infinite-scroll-component'
+import Loading from '../shared/Loading'
 
 function BucketList() {
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
+    queryKey: ['buckets'],
+    // @ts-ignore
+    queryFn: ({ pageParam }: { pageParam?: QuerySnapshot<Bucket> }) =>
+      getBuckets(pageParam),
+    getNextPageParam: (lastSnapshot) => lastSnapshot.lastVisible,
+    initialPageParam: undefined,
+  })
+
+  const handleLoadMore = () => {
+    if (!hasNextPage || isFetching) return
+
+    fetchNextPage()
+  }
+
   return (
-    <section>
-      {dummyBuckets.map((bucket) => (
-        <ListItem
-          key={bucket.id}
-          left={
-            <img
-              src={bucket.thumbnailImageURL}
-              alt={`${bucket.title} 썸네일 이미지`}
-            />
-          }
-          contents={
-            <div>
-              <span>{formatDate(new Date(bucket.dueDate))}</span>
-              <ListItem.ListItemText text={bucket.title} />
-              {bucket.todos.map((todo) => (
-                <div key={todo.id}>
-                  <span>{todo.title}</span>
+    <InfiniteScroll
+      hasMore={hasNextPage}
+      next={handleLoadMore}
+      loader={<Loading />}
+      dataLength={data?.pages.flatMap((page) => page.buckets).length ?? 0}
+    >
+      <ul>
+        {data?.pages
+          .flatMap((page) => page.buckets)
+          .map((bucket) => (
+            <ListItem
+              key={bucket.id}
+              left={
+                <img
+                  src={bucket.thumbnailImageURL}
+                  alt={`${bucket.title} 썸네일 이미지`}
+                />
+              }
+              contents={
+                <div>
+                  <span>{formatDate(new Date(bucket.dueDate))}</span>
+                  <ListItem.ListItemText text={bucket.title} />
+                  {bucket.todos.map((todo) => (
+                    <div key={todo.id}>
+                      <span>{todo.title}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          }
-          right={<input type="checkbox" />}
-        />
-      ))}
-    </section>
+              }
+              right={<input type="checkbox" />}
+            />
+          ))}
+      </ul>
+    </InfiniteScroll>
   )
 }
 

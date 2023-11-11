@@ -6,6 +6,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import ErrorPage from './components/shared/RouteError'
 import Layout from './components/shared/Layout'
 import HomePage from './pages/Home'
+import TestPage from './pages/Test'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const router = createBrowserRouter([
   {
@@ -33,14 +35,22 @@ const router = createBrowserRouter([
           </div>
         ),
       },
+      {
+        path: 'test',
+        element: <TestPage />,
+      },
     ],
   },
 ])
 
+const queryClient = new QueryClient()
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>,
 )
 
