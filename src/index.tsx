@@ -8,6 +8,7 @@ import Layout from './components/shared/Layout'
 import HomePage from './pages/Home'
 import TestPage from './pages/Test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import BucketCreatePage from './pages/BucketCreate'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
         element: <TestPage />,
       },
     ],
+  },
+  {
+    path: '/bucket/create',
+    element: <BucketCreatePage />,
   },
 ])
 

@@ -1,6 +1,7 @@
 import { Bucket } from '@/models/bucket'
 import {
   QuerySnapshot,
+  addDoc,
   collection,
   getDocs,
   limit,
@@ -31,4 +32,9 @@ export const getBuckets = async (pageParam?: QuerySnapshot<Bucket>) => {
     })),
     lastVisible,
   }
+}
+
+export const createBucket = async (bucket: Bucket) => {
+  const bucketRef = collection(store, COLLECTIONS.BUCKET)
+  await addDoc(bucketRef, bucket)
 }
