@@ -9,6 +9,9 @@ import HomePage from './pages/Home'
 import TestPage from './pages/Test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import BucketCreatePage from './pages/BucketCreate'
+import SignInPage from './pages/SignIn'
+import NicknameSignInPage from './pages/NicknameSignIn'
+import SignOut from './components/shared/SignOut'
 
 const router = createBrowserRouter([
   {
@@ -21,10 +24,19 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
+        path: 'signin',
+        element: <SignInPage />,
+      },
+      {
+        path: 'signin/nickname',
+        element: <NicknameSignInPage />,
+      },
+      {
         path: 'buckets',
         element: (
           <div>
             <span>Buckets</span>
+            <SignOut />
           </div>
         ),
       },
