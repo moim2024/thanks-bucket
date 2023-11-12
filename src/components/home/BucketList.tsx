@@ -2,19 +2,19 @@ import { formatDate } from '@/utils/date'
 import ListItem from '../shared/ListRow'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { getBuckets } from '@/remote/bucket'
-import { QuerySnapshot } from 'firebase/firestore'
-import { Bucket } from '@/models/bucket'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Loading from '../shared/Loading'
 
 function BucketList() {
-  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
+  const {
+    data,
+    hasNextPage = false,
+    fetchNextPage,
+    isFetching,
+  } = useInfiniteQuery({
     queryKey: ['buckets'],
-    // @ts-ignore
-    queryFn: ({ pageParam }: { pageParam?: QuerySnapshot<Bucket> }) =>
-      getBuckets(pageParam),
+    queryFn: ({ pageParam }) => getBuckets(pageParam),
     getNextPageParam: (lastSnapshot) => lastSnapshot.lastVisible,
-    initialPageParam: undefined,
   })
 
   const handleLoadMore = () => {
