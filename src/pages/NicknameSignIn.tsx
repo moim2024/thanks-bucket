@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { validateNickname } from '@/utils/validate'
-import { signInWithNickname } from '@/remote/signIn'
+import { saveUserData, signInWithNickname } from '@/remote/auth'
 
 function NicknameSignInPage() {
   const navigate = useNavigate()
@@ -22,13 +22,15 @@ function NicknameSignInPage() {
     setIsTouched(true)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsTouched(false)
 
     try {
-      signInWithNickname(nickname)
-
+      const user = await signInWithNickname(nickname)
+      if (user) {
+        await saveUserData(user)
+      }
       navigate('/buckets')
     } catch (error) {
       console.error('로그인 실패', error)
