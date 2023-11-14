@@ -3,16 +3,17 @@ import { getGoogleRedirectResult, signInWithGoogle } from '@/remote/auth'
 import { saveUserData } from '@/remote/auth'
 import { useEffect, useState } from 'react'
 import { UserCredential } from 'firebase/auth'
+import Loading from '../shared/Loading'
 
 function GoogleSignIn() {
   const navigate = useNavigate()
   const [redirectResult, setRedirectResult] = useState<
     UserCredential | null | undefined
   >(null)
-
-  console.log('result', redirectResult)
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleGoogleSignIn = async () => {
+    setIsLoading(true)
     await signInWithGoogle()
   }
 
@@ -20,6 +21,7 @@ function GoogleSignIn() {
     ;(async () => {
       const result = await getGoogleRedirectResult()
       setRedirectResult(result)
+      setIsLoading(false)
     })()
   }, [])
 
@@ -33,7 +35,10 @@ function GoogleSignIn() {
 
   return (
     <>
-      <button onClick={handleGoogleSignIn}>Google로 시작하기</button>
+      {isLoading && <Loading />}
+      <button onClick={handleGoogleSignIn} disabled={isLoading}>
+        Google로 시작하기
+      </button>
     </>
   )
 }
