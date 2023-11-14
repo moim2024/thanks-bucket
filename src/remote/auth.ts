@@ -1,6 +1,12 @@
-import { signInAnonymously, updateProfile, User } from '@firebase/auth'
+import {
+  signInAnonymously,
+  updateProfile,
+  signInWithRedirect,
+  getRedirectResult,
+  User,
+} from '@firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
-import { auth, store } from './firebase'
+import { auth, provider, store } from './firebase'
 import { COLLECTIONS } from '@/constants'
 
 export const signInWithNickname = async (nickname: string) => {
@@ -14,6 +20,23 @@ export const signInWithNickname = async (nickname: string) => {
     return user
   } catch (error) {
     console.error('로그인 실패', error)
+  }
+}
+
+export const signInWithGoogle = async () => {
+  try {
+    await signInWithRedirect(auth, provider)
+  } catch (error) {
+    console.error('Google 로그인 오류:', error)
+  }
+}
+
+export const getGoogleRedirectResult = async () => {
+  try {
+    const result = await getRedirectResult(auth)
+    return result
+  } catch (error) {
+    console.error('Google 리디렉션 결과 오류:', error)
   }
 }
 

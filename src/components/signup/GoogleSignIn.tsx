@@ -1,57 +1,41 @@
-import { useEffect } from 'react'
-
-import { getRedirectResult, signInWithRedirect } from 'firebase/auth'
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
-
-import { auth, provider, store } from '@/remote/firebase'
-import { COLLECTIONS } from '@/constants'
+import { getGoogleRedirectResult, signInWithGoogle } from '@/remote/auth'
+import { saveUserData } from '@/remote/auth'
+import { useEffect, useState } from 'react'
+import { UserCredential } from 'firebase/auth'
 
 function GoogleSignIn() {
   const navigate = useNavigate()
+  const [redirectResult, setRedirectResult] = useState<
+    UserCredential | null | undefined
+  >(null)
+
+  console.log('result', redirectResult)
 
   const handleGoogleSignIn = async () => {
-    try {
-      await signInWithRedirect(auth, provider)
-    } catch (error) {
-      console.error(error)
-    }
+    await signInWithGoogle()
   }
 
   useEffect(() => {
-    const handleUserDataAndRedirect = async () => {
-      try {
-        const result = await getRedirectResult(auth)
+    ;(async () => {
+      const result = await getGoogleRedirectResult()
+      setRedirectResult(result)
+    })()
+  }, [])
 
-        if (result?.user) {
-          const userId = result?.user.uid
-          const userDoc = await getDoc(
-            doc(collection(store, COLLECTIONS.USER), userId),
-          )
+  useEffect(() => {
+    if (redirectResult && redirectResult.user) {
+      saveUserData(redirectResult.user)
 
-          if (!userDoc.exists()) {
-            const userData = {
-              displayName: result?.user.displayName,
-              level: 1,
-            }
-            await setDoc(
-              doc(collection(store, COLLECTIONS.USER), userId),
-              userData,
-            )
-            navigate('/user/setting/nickname')
-          } else {
-            navigate('/buckets')
-          }
-        }
-      } catch (error) {
-        console.error(error)
-      }
+      navigate('/buckets')
     }
+  }, [redirectResult, navigate])
 
-    handleUserDataAndRedirect()
-  }, [navigate])
-
-  return <button onClick={handleGoogleSignIn}>Google로 시작하기</button>
+  return (
+    <>
+      <button onClick={handleGoogleSignIn}>Google로 시작하기</button>
+    </>
+  )
 }
 
 export default GoogleSignIn
