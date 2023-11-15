@@ -17,6 +17,8 @@ function BucketList() {
     getNextPageParam: (lastSnapshot) => lastSnapshot.lastVisible,
   })
 
+  const buckets = data?.pages.flatMap((page) => page.buckets)
+
   const handleLoadMore = () => {
     if (!hasNextPage || isFetching) return
 
@@ -28,34 +30,32 @@ function BucketList() {
       hasMore={hasNextPage}
       next={handleLoadMore}
       loader={<Loading />}
-      dataLength={data?.pages.flatMap((page) => page.buckets).length ?? 0}
+      dataLength={buckets?.length ?? 0}
     >
       <ul>
-        {data?.pages
-          .flatMap((page) => page.buckets)
-          .map((bucket) => (
-            <ListItem
-              key={bucket.id}
-              left={
-                <img
-                  src={bucket.thumbnailImageURL}
-                  alt={`${bucket.title} 썸네일 이미지`}
-                />
-              }
-              contents={
-                <div>
-                  <span>{formatDate(new Date(bucket.dueDate))}</span>
-                  <ListItem.ListItemText text={bucket.title} />
-                  {bucket.todos.map((todo) => (
-                    <div key={todo.id}>
-                      <span>{todo.title}</span>
-                    </div>
-                  ))}
-                </div>
-              }
-              right={<input type="checkbox" />}
-            />
-          ))}
+        {buckets?.map((bucket) => (
+          <ListItem
+            key={bucket.id}
+            left={
+              <img
+                src={bucket.thumbnailImageURL}
+                alt={`${bucket.title} 썸네일 이미지`}
+              />
+            }
+            contents={
+              <div>
+                <span>{formatDate(new Date(bucket.dueDate))}</span>
+                <ListItem.ListItemText text={bucket.title} />
+                {bucket.todos.map((todo) => (
+                  <div key={todo.id}>
+                    <span>{todo.title}</span>
+                  </div>
+                ))}
+              </div>
+            }
+            right={<input type="checkbox" />}
+          />
+        ))}
       </ul>
     </InfiniteScroll>
   )
