@@ -12,6 +12,7 @@ import BucketCreatePage from './pages/BucketCreate'
 import SignInPage from './pages/SignIn'
 import NicknameSignInPage from './pages/NicknameSignIn'
 import SignOut from './components/shared/SignOut'
+import SignUpPage from './pages/SignUp'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'signin/nickname',
         element: <NicknameSignInPage />,
+      },
+      {
+        path: 'signup',
+        element: <SignUpPage />,
       },
       {
         path: 'buckets',

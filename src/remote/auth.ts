@@ -1,6 +1,7 @@
 import {
   signInAnonymously,
   updateProfile,
+  createUserWithEmailAndPassword,
   signInWithRedirect,
   getRedirectResult,
   User,
@@ -20,6 +21,26 @@ export const signInWithNickname = async (nickname: string) => {
     return user
   } catch (error) {
     console.error('로그인 실패', error)
+  }
+}
+
+export const signUpWithEmail = async (
+  email: string,
+  password: string,
+  nickname: string,
+) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+    await updateProfile(user, {
+      displayName: nickname,
+    })
+
+    await saveUserData(user)
+
+    return user
+  } catch (error) {
+    console.error(error)
   }
 }
 
