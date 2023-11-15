@@ -1,7 +1,7 @@
 export interface Bucket {
   title: string
-  createDate: string // yyyy-MM-dd
-  dueDate: string // yyyy-MM-dd
+  createDate: Date
+  dueDate: Date
   userID: number
   thumbnailImageURL?: string
   todos: Todo[]

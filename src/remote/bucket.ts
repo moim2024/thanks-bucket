@@ -34,7 +34,7 @@ export const getBuckets = async (pageParam?: QuerySnapshot<Bucket>) => {
   }
 }
 
-export const createBucket = async (bucket: Bucket) => {
+export const createBucket = (bucket: Bucket) => {
   const bucketRef = collection(store, COLLECTIONS.BUCKET)
-  await addDoc(bucketRef, bucket)
+  return addDoc(bucketRef, bucket)
 }

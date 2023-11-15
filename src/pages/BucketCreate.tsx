@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { format } from 'date-fns'
 import { createBucket } from '@/remote/bucket'
 import { useNavigate } from 'react-router-dom'
+import { categoryList } from '@/constants/data'
 
 interface BucketFormData {
   title: string
@@ -17,18 +18,6 @@ const defaultBucketFormData: BucketFormData = {
   todos: [],
 }
 
-const categoryList = [
-  '건강',
-  '학업',
-  '여행',
-  '커리어',
-  '자기계발',
-  '취미/여가',
-  '연애',
-  '가족',
-  '일상/삶',
-]
-
 function BucketCreatePage() {
   const navigate = useNavigate()
 
@@ -36,17 +25,13 @@ function BucketCreatePage() {
     defaultBucketFormData,
   )
 
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeValue = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: string,
+  ) => {
     setFormData({
       ...formData,
-      title: e.target.value,
-    })
-  }
-
-  const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      category: e.target.value,
+      [key]: e.target.value,
     })
   }
 
@@ -91,8 +76,8 @@ function BucketCreatePage() {
     try {
       await createBucket({
         title: formData.title,
-        createDate: format(new Date(), 'yyyy-MM-dd'),
-        dueDate: format(formData.dueDate, 'yyyy-MM-dd'),
+        createDate: new Date(),
+        dueDate: formData.dueDate,
         userID: 0, // FIXME: 희지 로그인 연동 후, 수정
         todos: formData.todos.map((todo) => ({
           title: todo,
@@ -114,7 +99,7 @@ function BucketCreatePage() {
         <input
           type="text"
           value={formData.title}
-          onChange={handleChangeTitle}
+          onChange={(e) => handleChangeValue(e, 'title')}
         />
 
         <div>
@@ -125,7 +110,7 @@ function BucketCreatePage() {
                 name="category"
                 value={category}
                 checked={formData.category === category}
-                onChange={handleChangeCategory}
+                onChange={(e) => handleChangeValue(e, 'category')}
               />
               {category}
             </label>
