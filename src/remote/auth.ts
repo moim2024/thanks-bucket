@@ -26,7 +26,7 @@ export const saveUserData = async (user: User) => {
 
     const userData = {
       displayName: displayName,
-      email: email || '',
+      email: email ?? '',
       level: isAnonymous ? 0 : 1,
     }
 
