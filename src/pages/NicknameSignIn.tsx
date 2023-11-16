@@ -11,7 +11,6 @@ function NicknameSignInPage() {
   const [isTouched, setIsTouched] = useState(false)
 
   const isNicknameInvalid = isTouched && validateNickname(nickname)
-  const isFormValid = !isNicknameInvalid && nickname
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
@@ -24,9 +23,12 @@ function NicknameSignInPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    await signInWithNickname(nickname)
-    navigate('/buckets')
+    try {
+      await signInWithNickname(nickname)
+      navigate('/buckets')
+    } catch (error) {
+      alert(error)
+    }
   }
 
   return (
@@ -45,7 +47,7 @@ function NicknameSignInPage() {
       </label>
 
       <div>
-        <button type="submit" disabled={!isFormValid}>
+        <button type="submit" disabled={!!validateNickname(nickname)}>
           시작하기
         </button>
       </div>
