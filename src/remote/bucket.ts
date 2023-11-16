@@ -29,6 +29,7 @@ export const getBuckets = async (pageParam?: QuerySnapshot<Bucket>) => {
     buckets: bucketSnapshot.docs.map((doc) => ({
       ...(doc.data() as Bucket),
       id: doc.id,
+      dueDate: doc.data().dueDate.toDate(), // firebase Timestamp 타입을 Date 타입으로 변환
     })),
     lastVisible,
   }
