@@ -3,8 +3,8 @@ import { Bucket } from '@/models/bucket'
 export const dummyBuckets: Bucket[] = [
   {
     title: '한라산 등반',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -16,8 +16,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -29,8 +29,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -42,8 +42,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -55,8 +55,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -68,8 +68,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -81,8 +81,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -94,8 +94,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -107,8 +107,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -120,8 +120,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -133,8 +133,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -146,8 +146,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -159,8 +159,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -172,8 +172,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -185,8 +185,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -198,8 +198,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -211,8 +211,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -224,8 +224,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -237,8 +237,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -250,8 +250,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -263,8 +263,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -276,8 +276,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -289,8 +289,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
@@ -302,8 +302,8 @@ export const dummyBuckets: Bucket[] = [
   },
   {
     title: '책 10권 읽기',
-    createDate: new Date().toString(),
-    dueDate: new Date().toString(),
+    createDate: new Date(),
+    dueDate: new Date(),
     userID: 0,
     thumbnailImageURL: 'http://via.placeholder.com/52x52',
     todos: [
