@@ -63,6 +63,7 @@ function BucketForm({ onSubmit }: BucketFormProps) {
       </div>
 
       <input
+        name="dueDate"
         type="date"
         value={formData.dueDate}
         onChange={handleChangeValue}
