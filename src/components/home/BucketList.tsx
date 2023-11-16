@@ -47,7 +47,7 @@ function BucketList() {
                 <span>{formatDate(new Date(bucket.dueDate))}</span>
                 <ListItem.ListItemText text={bucket.title} />
                 {bucket.todos.map((todo) => (
-                  <div key={todo.id}>
+                  <div key={todo.title}>
                     <span>{todo.title}</span>
                   </div>
                 ))}

@@ -26,6 +26,13 @@ function BucketForm({ onSubmit }: BucketFormProps) {
     })
   }
 
+  const handleChangeTodos = (todos: string[]) => {
+    setFormData({
+      ...formData,
+      todos,
+    })
+  }
+
   const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     onSubmit(formData)
@@ -61,7 +68,7 @@ function BucketForm({ onSubmit }: BucketFormProps) {
         onChange={handleChangeValue}
       />
 
-      <TodoForm formData={formData} setFormData={setFormData} />
+      <TodoForm onChangeTodos={handleChangeTodos} />
 
       <button type="submit">생성</button>
     </form>

@@ -1,38 +1,38 @@
-import { BucketFormData } from '@/models/bucket'
+import { useState } from 'react'
 
 function TodoForm({
-  formData,
-  setFormData,
+  onChangeTodos,
 }: {
-  formData: BucketFormData
-  setFormData: React.Dispatch<React.SetStateAction<BucketFormData>>
+  onChangeTodos: (todos: string[]) => void
 }) {
+  const [todos, setTodos] = useState<string[]>([])
+
+  const updateTodos = (newTodos: string[]) => {
+    setTodos(newTodos)
+    onChangeTodos(newTodos)
+  }
+
   const handleAddTodo = () => {
-    setFormData({
-      ...formData,
-      todos: [...formData.todos, ''],
-    })
+    const newTodos = [...todos, '']
+
+    updateTodos(newTodos)
   }
 
   const handleChangeTodo = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
   ) => {
-    const newTodos = [...formData.todos]
+    const newTodos = [...todos]
     newTodos[index] = e.target.value
-    setFormData({
-      ...formData,
-      todos: newTodos,
-    })
+
+    updateTodos(newTodos)
   }
 
   const handleDeleteTodo = (index: number) => {
-    const newTodos = [...formData.todos]
+    const newTodos = [...todos]
     newTodos.splice(index, 1)
-    setFormData({
-      ...formData,
-      todos: newTodos,
-    })
+
+    updateTodos(newTodos)
   }
 
   return (
@@ -41,7 +41,7 @@ function TodoForm({
         투두 추가
       </button>
 
-      {formData.todos.map((todo, index) => (
+      {todos.map((todo, index) => (
         <div key={index}>
           <input
             type="text"
