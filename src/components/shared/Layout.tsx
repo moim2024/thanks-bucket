@@ -1,4 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
+import SignOut from './SignOut'
 
 function Layout() {
   return (
@@ -13,6 +14,9 @@ function Layout() {
           </li>
           <li>
             <Link to={'/feed'}>피드</Link>
+          </li>
+          <li>
+            <SignOut />
           </li>
         </ul>
       </nav>
