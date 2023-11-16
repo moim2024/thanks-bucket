@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { signUpWithEmail } from '@/remote/auth'
+import { checkEmailDuplication, signUpWithEmail } from '@/remote/auth'
 import {
   validateEmail,
   validateNickname,
@@ -24,8 +24,12 @@ function SignUpPage() {
     confirmPassword: false,
     nickname: false,
   })
+  const [isEmailDuplicated, setIsEmailDuplicated] = useState<boolean | null>(
+    null,
+  )
 
   const emailValidationResult = isTouched.email && validateEmail(formData.email)
+  const emailDuplicationResult = isTouched.email && isEmailDuplicated
   const passwordValidationResult =
     isTouched.password && validatePassword(formData.password)
   const passwordMatchValidationResult =
@@ -52,6 +56,10 @@ function SignUpPage() {
       ...prevData,
       [name]: value,
     }))
+
+    if (name === 'email' && isEmailDuplicated !== null) {
+      setIsEmailDuplicated(null)
+    }
   }
 
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,8 +70,15 @@ function SignUpPage() {
     }))
   }
 
+  const handleCheckDuplicate = async () => {
+    const { email } = formData
+    const duplicated = await checkEmailDuplication(email)
+    setIsEmailDuplicated(duplicated)
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const { email, password, nickname } = formData
     await signUpWithEmail(email, password, nickname)
     navigate('/buckets')
@@ -82,10 +97,27 @@ function SignUpPage() {
               onChange={handleInput}
               onBlur={handleBlur}
             />
-            {emailValidationResult && (
-              <span>{emailValidationResult.message}</span>
+            {(isTouched.email || isEmailDuplicated !== null) && (
+              <span>
+                {emailValidationResult && emailValidationResult.message}
+              </span>
             )}
           </label>
+          <button
+            type="button"
+            onClick={handleCheckDuplicate}
+            disabled={!formData.email || !!emailValidationResult}
+          >
+            중복 확인
+          </button>
+
+          <span>
+            {emailDuplicationResult
+              ? '이미 사용 중인 이메일이에요.'
+              : isEmailDuplicated === false
+              ? '사용할 수 있는 이메일이에요.'
+              : ''}
+          </span>
         </div>
         <div>
           <label>

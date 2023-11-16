@@ -6,7 +6,16 @@ import {
   getRedirectResult,
   User,
 } from '@firebase/auth'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDoc,
+  query,
+  where,
+  setDoc,
+  updateDoc,
+  getDocs,
+} from 'firebase/firestore'
 import { auth, provider, store } from './firebase'
 import { COLLECTIONS } from '@/constants'
 
@@ -22,6 +31,15 @@ export const signInWithNickname = async (nickname: string) => {
   } catch (error) {
     console.error('로그인 실패', error)
   }
+}
+
+export const checkEmailDuplication = async (inputEmail: string) => {
+  const userRef = collection(store, COLLECTIONS.USER)
+
+  const emailQuery = query(userRef, where('email', '==', inputEmail))
+  const querySnapshot = await getDocs(emailQuery)
+
+  return !querySnapshot.empty
 }
 
 export const signUpWithEmail = async (
