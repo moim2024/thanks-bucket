@@ -11,3 +11,10 @@ export interface Todo {
   title: string
   isCompleted: boolean
 }
+
+export interface BucketFormData {
+  title: string
+  category: string
+  dueDate: string
+  todos: string[]
+}
