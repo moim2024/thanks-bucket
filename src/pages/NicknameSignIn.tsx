@@ -1,14 +1,16 @@
 import { useState } from 'react'
 
-import { useNavigate } from 'react-router'
-
 import { validateNickname } from '@/utils/validate'
 import { signInWithNickname } from '@/remote/auth'
+import useSignIn from '@/hooks/useSignIn'
 
 function NicknameSignInPage() {
-  const navigate = useNavigate()
   const [nickname, setNickname] = useState('')
   const [isTouched, setIsTouched] = useState(false)
+  const { handleSubmit } = useSignIn({
+    signInFunction: signInWithNickname,
+    params: [nickname],
+  })
 
   const isNicknameInvalid = isTouched && validateNickname(nickname)
 
@@ -19,16 +21,6 @@ function NicknameSignInPage() {
 
   const handleBlur = () => {
     setIsTouched(true)
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    try {
-      await signInWithNickname(nickname)
-      navigate('/buckets')
-    } catch (error) {
-      alert(error)
-    }
   }
 
   return (
