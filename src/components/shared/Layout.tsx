@@ -1,4 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
+import SignOut from './SignOut'
 
 function Layout() {
   return (
@@ -6,10 +7,16 @@ function Layout() {
       <nav>
         <ul>
           <li>
+            <Link to={'/signin'}>시작하기</Link>
+          </li>
+          <li>
             <Link to={'/buckets'}>마이 버킷</Link>
           </li>
           <li>
             <Link to={'/feed'}>피드</Link>
+          </li>
+          <li>
+            <SignOut />
           </li>
         </ul>
       </nav>
