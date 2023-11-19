@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom'
-
 import { useState } from 'react'
-import { signInWithEmail } from '@/remote/auth'
+
+import { useNavigate } from 'react-router-dom'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+
+import { auth } from '@/remote/firebase'
 
 function SignInForm() {
   const navigate = useNavigate()
@@ -25,10 +27,10 @@ function SignInForm() {
 
     try {
       const { email, password } = formData
-      await signInWithEmail(email, password)
+      await signInWithEmailAndPassword(auth, email, password)
       navigate('/buckets')
     } catch (error: any) {
-      setIsError(error.message)
+      setIsError('존재하는 계정이 없거나 잘못된 비밀번호에요')
     }
   }
   return (
