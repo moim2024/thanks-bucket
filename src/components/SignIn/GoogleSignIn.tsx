@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
+import { signInWithRedirect } from 'firebase/auth'
 
-import { getGoogleRedirectResult, signInWithGoogle } from '@/remote/auth'
-import { saveUserData } from '@/remote/auth'
+import { getGoogleRedirectResult } from '@/remote/auth'
+import { auth, provider } from '@/remote/firebase'
 import Loading from '../shared/Loading'
 
 function GoogleSignIn() {
@@ -12,23 +13,19 @@ function GoogleSignIn() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle()
+      await signInWithRedirect(auth, provider)
     } catch (error) {
-      alert(error)
+      alert('로그인을 다시 시도해 주세요.') // 변경 예정
     }
   }
 
   useEffect(() => {
     const getRedirectResult = async () => {
       try {
-        const result = await getGoogleRedirectResult()
+        await getGoogleRedirectResult()
         setIsLoading(false)
-        if (result && result.user) {
-          navigate('/buckets')
-          await saveUserData(result.user)
-        }
       } catch (error) {
-        alert(error)
+        alert('로그인을 다시 시도해 주세요.') // 변경 예정
       }
     }
 

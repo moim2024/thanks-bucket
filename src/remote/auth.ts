@@ -1,30 +1,19 @@
-import {
-  User,
-  UserCredential,
-  getRedirectResult,
-  signInWithRedirect,
-} from 'firebase/auth'
-import { auth, provider, store } from './firebase'
+import { User, getRedirectResult } from 'firebase/auth'
+import { auth, store } from './firebase'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { COLLECTIONS } from '@/constants'
 
-export const signInWithGoogle = async () => {
+export const getGoogleRedirectResult = async () => {
   try {
-    await signInWithRedirect(auth, provider)
+    const result = await getRedirectResult(auth)
+
+    if (result) {
+      await saveUserData(result.user)
+    }
   } catch (error) {
-    throw new Error('로그인을 다시 시도해 주세요.')
+    throw new Error('결과를 가져오지 못 했어요. 다시 시도해 주세요.')
   }
 }
-
-export const getGoogleRedirectResult =
-  async (): Promise<UserCredential | null> => {
-    try {
-      const result = await getRedirectResult(auth)
-      return result
-    } catch (error) {
-      throw new Error('결과를 가져오지 못 했어요. 다시 시도해 주세요.')
-    }
-  }
 
 export const saveUserData = async (user: User) => {
   try {
