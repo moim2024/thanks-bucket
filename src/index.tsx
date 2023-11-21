@@ -8,6 +8,9 @@ import Layout from './components/shared/Layout'
 import HomePage from './pages/Home'
 import TestPage from './pages/Test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import SignInPage from './pages/SignIn'
+import AuthGuard from './components/auth/AuthGuard'
+import AuthProvider from './context/AuthProvider'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <HomePage />,
+      },
+      {
+        path: 'signin',
+        element: <SignInPage />,
       },
       {
         path: 'buckets',
@@ -49,7 +56,11 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <AuthGuard>
+          <RouterProvider router={router} />
+        </AuthGuard>
+      </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 )
