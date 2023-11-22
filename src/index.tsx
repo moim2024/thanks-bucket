@@ -9,6 +9,7 @@ import HomePage from './pages/Home'
 import TestPage from './pages/Test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import SignUpPage from './pages/SignUp'
+import SignInPage from './pages/SignIn'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: 'signup',
         element: <SignUpPage />,
+      },
+      {
+        path: 'signin',
+        element: <SignInPage />,
       },
       {
         path: 'buckets',

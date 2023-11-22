@@ -1,114 +1,61 @@
 import { useState } from 'react'
 
 import { checkIsEmailDuplicated, signUpWithEmail } from '@/remote/auth'
-import {
-  validateEmail,
-  validateNickname,
-  validatePassword,
-  validatePasswordMatch,
-} from '@/utils/validate'
+import { checkValidate } from '@/utils/validate'
 import useSignIn from '@/hooks/useSignIn'
 
-interface formData {
-  [key: string]: {
-    value: string
-    isInvalid: boolean
-    isTouched: boolean
-  }
-}
-interface Validators {
-  [key: string]: (
-    value: string,
-    confirmPassword?: string,
-  ) => { message: string } | undefined
-}
-
-const validators: Validators = {
-  nickname: validateNickname,
-  email: validateEmail,
-  password: validatePassword,
-  confirmPassword: validatePasswordMatch,
-}
-
 function SignUpForm() {
-  const [formData, setFormData] = useState<formData>({})
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    nickname: '',
+  })
+  const [isTouched, setIsTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false,
+    nickname: false,
+  })
+
   const [isEmailDuplicated, setIsEmailDuplicated] = useState(false)
   const [showEmailMessage, setShowEmailMessage] = useState(false)
   const { handleSubmit } = useSignIn({
     signInFunction: signUpWithEmail,
-    params: [
-      formData.email?.value,
-      formData.password?.value,
-      formData.nickname?.value,
-    ],
+    params: [formValues.email, formValues.password, formValues.nickname],
   })
+  const errors = checkValidate(formValues)
+  console.log(formValues, errors)
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    let isInvalid = false
 
-    const validator = validators[name]
-    if (validator) {
-      const result = validator(
-        value,
-        name === 'confirmPassword' ? formData.password.value : undefined,
-      )
-      isInvalid = !!result
-    }
-
-    setFormData((prevData) => ({
+    console.log(formValues)
+    setFormValues((prevData) => ({
       ...prevData,
-      [name]: {
-        value,
-        isInvalid,
-        isTouched: false,
-      },
+      [name]: value,
     }))
   }
 
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target
 
-    setFormData((prevData) => ({
+    console.log(isTouched)
+    setIsTouched((prevData) => ({
       ...prevData,
-      [name]: {
-        ...prevData[name],
-        isTouched: true,
-      },
+      [name]: true,
     }))
   }
 
   const checkDuplicate = async () => {
     try {
-      const email = formData.email?.value
+      const email = formValues.email
       const duplicated = await checkIsEmailDuplicated(email)
       setIsEmailDuplicated(duplicated)
       setShowEmailMessage(true)
     } catch (error) {
       alert(error)
     }
-  }
-
-  const getErrorMessage = (
-    field: string,
-    value: string,
-    confirmPassword?: string,
-  ) => {
-    return (
-      formData[field]?.isInvalid &&
-      formData[field].isTouched &&
-      validators[field](value, confirmPassword)?.message
-    )
-  }
-
-  const isFormValid = () => {
-    const allFieldsExist = Object.keys(validators).every((key) => formData[key])
-
-    return (
-      allFieldsExist &&
-      !isEmailDuplicated &&
-      Object.values(formData).every((field) => !field.isInvalid && field.value)
-    )
   }
 
   return (
@@ -125,25 +72,13 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
-          {getErrorMessage('email', formData.email?.value) && (
-            <span>{getErrorMessage('email', formData.email?.value)}</span>
+          {isTouched.email && errors.email && (
+            <span>{errors.email.message}</span>
           )}
-          <button
-            type="button"
-            onClick={checkDuplicate}
-            disabled={!formData.email?.value || !!formData.email?.isInvalid}
-          >
+          <button type="button" onClick={checkDuplicate}>
             중복 확인
           </button>
-          <span>
-            {showEmailMessage &&
-            formData.email?.isTouched &&
-            !formData.email?.isInvalid
-              ? isEmailDuplicated
-                ? '이미 사용 중인 이메일이에요.'
-                : '사용할 수 있는 이메일이에요.'
-              : null}
-          </span>
+          <span></span>
         </div>
         <div>
           <label>
@@ -156,8 +91,8 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
-          {getErrorMessage('password', formData.password?.value) && (
-            <span>{getErrorMessage('password', formData.password?.value)}</span>
+          {isTouched.password && errors.password && (
+            <span>{errors.password.message}</span>
           )}
         </div>
         <div>
@@ -171,18 +106,8 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
-          {getErrorMessage(
-            'confirmPassword',
-            formData.password?.value,
-            formData.confirmPassword?.value,
-          ) && (
-            <span>
-              {getErrorMessage(
-                'confirmPassword',
-                formData.password?.value,
-                formData.confirmPassword?.value,
-              )}
-            </span>
+          {isTouched.confirmPassword && errors.confirmPassword && (
+            <span>{errors.confirmPassword.message}</span>
           )}
         </div>
         <div>
@@ -196,14 +121,12 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
-          {getErrorMessage('nickname', formData.nickname?.value) && (
-            <span>{getErrorMessage('nickname', formData.nickname?.value)}</span>
+          {isTouched.nickname && errors.nickname && (
+            <span>{errors.nickname.message}</span>
           )}
         </div>
 
-        <button type="submit" disabled={!isFormValid()}>
-          가입 완료
-        </button>
+        <button type="submit">가입 완료</button>
       </form>
     </>
   )
