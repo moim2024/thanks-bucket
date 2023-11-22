@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import { checkIsEmailUnique, signUpWithEmail } from '@/remote/auth'
+import { checkIsEmailUnique } from '@/remote/auth'
 import { checkValidate } from '@/utils/validate'
-import useSignIn from '@/hooks/useSignIn'
+import useSignUp from '@/hooks/useSignUp'
 
 function SignUpForm() {
   const [formValues, setFormValues] = useState({
@@ -17,15 +17,11 @@ function SignUpForm() {
     confirmPassword: false,
     nickname: false,
   })
-
   const [isEmailUnique, setIsEmailUnique] = useState({ message: '' })
   const [isCheckUniqueButtonClicked, setIsCheckUniqueButtonClicked] =
     useState(false)
   const errors = checkValidate(formValues)
-  const { handleSubmit } = useSignIn({
-    signInFunction: signUpWithEmail,
-    params: [formValues.email, formValues.password, formValues.nickname],
-  })
+  const handleSignUp = useSignUp()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -54,8 +50,21 @@ function SignUpForm() {
       setIsEmailUnique(unique)
       setIsCheckUniqueButtonClicked(true)
     } catch (error) {
-      alert(error)
+      alert(error) // 추후 수정
     }
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (isCheckUniqueButtonClicked) {
+      handleSignUp(formValues)
+    }
+    setIsTouched({
+      email: true,
+      password: true,
+      confirmPassword: true,
+      nickname: true,
+    })
   }
 
   return (

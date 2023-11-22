@@ -10,7 +10,6 @@ import {
   getDocs,
   query,
   setDoc,
-  updateDoc,
   where,
 } from 'firebase/firestore'
 
@@ -34,42 +33,31 @@ export const signUpWithEmail = async (
   password: string,
   nickname: string,
 ) => {
-  try {
-    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+  const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
-    await updateProfile(user, {
-      displayName: nickname,
-    })
+  await updateProfile(user, {
+    displayName: nickname,
+  })
 
-    await saveUserData(user)
+  await saveUserData(user)
 
-    return user
-  } catch (error: any) {
-    throw new Error('로그인을 다시 시도해 주세요.')
-  }
+  return user
 }
 
 export const saveUserData = async (user: User) => {
-  try {
-    const { uid, displayName, email, isAnonymous } = user
+  const { uid, displayName, email, isAnonymous } = user
 
-    const userData = {
-      displayName: displayName,
-      email: email ?? '',
-      level: isAnonymous ? 0 : 1,
-    }
+  const userData = {
+    displayName: displayName,
+    email: email ?? '',
+    level: isAnonymous ? 0 : 1,
+  }
 
-    const userRef = doc(store, COLLECTIONS.USER, uid)
+  const userRef = doc(store, COLLECTIONS.USER, uid)
 
-    const userDoc = await getDoc(userRef)
+  const userDoc = await getDoc(userRef)
 
-    if (!userDoc.exists()) {
-      await setDoc(userRef, userData)
-    } else {
-      await updateDoc(userRef, userData)
-    }
-  } catch (error) {
-    console.error(error)
-    throw new Error('로그인을 다시 시도해 주세요.')
+  if (!userDoc.exists()) {
+    await setDoc(userRef, userData)
   }
 }
