@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { checkIsEmailDuplicated, signUpWithEmail } from '@/remote/auth'
+import { checkIsEmailUnique, signUpWithEmail } from '@/remote/auth'
 import { checkValidate } from '@/utils/validate'
 import useSignIn from '@/hooks/useSignIn'
 
@@ -18,41 +18,41 @@ function SignUpForm() {
     nickname: false,
   })
 
-  const [isEmailDuplicated, setIsEmailDuplicated] = useState(false)
-  const [showEmailMessage, setShowEmailMessage] = useState(false)
+  const [isEmailUnique, setIsEmailUnique] = useState({ message: '' })
+  const [isCheckUniqueButtonClicked, setIsCheckUniqueButtonClicked] =
+    useState(false)
+  const errors = checkValidate(formValues)
   const { handleSubmit } = useSignIn({
     signInFunction: signUpWithEmail,
     params: [formValues.email, formValues.password, formValues.nickname],
   })
-  const errors = checkValidate(formValues)
-  console.log(formValues, errors)
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    console.log(formValues)
     setFormValues((prevData) => ({
       ...prevData,
       [name]: value,
     }))
+    setIsCheckUniqueButtonClicked(false)
   }
 
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target
 
-    console.log(isTouched)
     setIsTouched((prevData) => ({
       ...prevData,
       [name]: true,
     }))
+    setIsCheckUniqueButtonClicked(false)
   }
 
-  const checkDuplicate = async () => {
+  const checkUnique = async () => {
     try {
       const email = formValues.email
-      const duplicated = await checkIsEmailDuplicated(email)
-      setIsEmailDuplicated(duplicated)
-      setShowEmailMessage(true)
+      const unique = await checkIsEmailUnique(email)
+      setIsEmailUnique(unique)
+      setIsCheckUniqueButtonClicked(true)
     } catch (error) {
       alert(error)
     }
@@ -75,10 +75,12 @@ function SignUpForm() {
           {isTouched.email && errors.email && (
             <span>{errors.email.message}</span>
           )}
-          <button type="button" onClick={checkDuplicate}>
+          <button type="button" onClick={checkUnique}>
             중복 확인
           </button>
-          <span></span>
+          {isTouched.email && !errors.email && isCheckUniqueButtonClicked && (
+            <span>{isEmailUnique.message}</span>
+          )}
         </div>
         <div>
           <label>

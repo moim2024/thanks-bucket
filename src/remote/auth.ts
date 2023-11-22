@@ -17,18 +17,15 @@ import {
 import { auth, store } from './firebase'
 import { COLLECTIONS } from '@/constants'
 
-export const checkIsEmailDuplicated = async (inputEmail: string) => {
-  try {
-    const userRef = collection(store, COLLECTIONS.USER)
+export const checkIsEmailUnique = async (inputEmail: string) => {
+  const userRef = collection(store, COLLECTIONS.USER)
+  const emailQuery = query(userRef, where('email', '==', inputEmail))
+  const querySnapshot = await getDocs(emailQuery)
 
-    const emailQuery = query(userRef, where('email', '==', inputEmail))
-    const querySnapshot = await getDocs(emailQuery)
-
-    return !querySnapshot.empty
-  } catch (error) {
-    throw new Error(
-      '이메일 중복 결과를 가져오지 못 했어요. 다시 시도해 주세요.',
-    )
+  if (querySnapshot.empty) {
+    return { message: '사용할 수 있는 이메일이에요.' }
+  } else {
+    return { message: '이미 사용 중인 이메일이에요.' }
   }
 }
 
