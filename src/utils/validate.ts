@@ -45,14 +45,14 @@ const validatePasswordMatch = (password: string, confirmPassword?: string) => {
   }
 
   if (password !== confirmPassword) {
-    return { message: '입력하신 두 비밀번호가 달라요.' }
+    return { isMatched: false, message: '입력하신 두 비밀번호가 달라요.' }
   } else {
-    return { message: '비밀번호가 일치해요.' }
+    return { isMathced: true, message: '비밀번호가 일치해요.' }
   }
 }
 
 export const checkValidate = (formValues: FormValues) => {
-  let errors: { [key: string]: { message: string } } = {}
+  let errors: { [key: string]: { isMatched?: boolean; message: string } } = {}
 
   if (formValues.email !== null) {
     const result = validateEmail(formValues.email)

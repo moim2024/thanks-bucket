@@ -17,9 +17,11 @@ function SignUpForm() {
     confirmPassword: false,
     nickname: false,
   })
-  const [isEmailUnique, setIsEmailUnique] = useState({ message: '' })
-  const [isCheckUniqueButtonClicked, setIsCheckUniqueButtonClicked] =
-    useState(false)
+  const [isEmailUnique, setIsEmailUnique] = useState({
+    isUnique: false,
+    message: '',
+  })
+  const [isCheckEmailUnique, setIsCheckEmailUnique] = useState(false)
   const errors = checkValidate(formValues)
   const handleSignUp = useSignUp()
 
@@ -30,7 +32,7 @@ function SignUpForm() {
       ...prevData,
       [name]: value,
     }))
-    setIsCheckUniqueButtonClicked(false)
+    setIsCheckEmailUnique(false)
   }
 
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +42,6 @@ function SignUpForm() {
       ...prevData,
       [name]: true,
     }))
-    setIsCheckUniqueButtonClicked(false)
   }
 
   const checkUnique = async () => {
@@ -48,7 +49,7 @@ function SignUpForm() {
       const email = formValues.email
       const unique = await checkIsEmailUnique(email)
       setIsEmailUnique(unique)
-      setIsCheckUniqueButtonClicked(true)
+      setIsCheckEmailUnique(true)
     } catch (error) {
       alert(error) // 추후 수정
     }
@@ -56,15 +57,7 @@ function SignUpForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (isCheckUniqueButtonClicked) {
-      handleSignUp(formValues)
-    }
-    setIsTouched({
-      email: true,
-      password: true,
-      confirmPassword: true,
-      nickname: true,
-    })
+    handleSignUp(formValues)
   }
 
   return (
@@ -87,7 +80,7 @@ function SignUpForm() {
           <button type="button" onClick={checkUnique}>
             중복 확인
           </button>
-          {isTouched.email && !errors.email && isCheckUniqueButtonClicked && (
+          {isTouched.email && !errors.email && isCheckEmailUnique && (
             <span>{isEmailUnique.message}</span>
           )}
         </div>
@@ -137,7 +130,15 @@ function SignUpForm() {
           )}
         </div>
 
-        <button type="submit">가입 완료</button>
+        <button
+          type="submit"
+          disabled={
+            errors.confirmPassword.isMatched === false ||
+            isEmailUnique.isUnique === false
+          }
+        >
+          가입 완료
+        </button>
       </form>
     </>
   )

@@ -22,9 +22,9 @@ export const checkIsEmailUnique = async (inputEmail: string) => {
   const querySnapshot = await getDocs(emailQuery)
 
   if (querySnapshot.empty) {
-    return { message: '사용할 수 있는 이메일이에요.' }
+    return { isUnique: true, message: '사용할 수 있는 이메일이에요.' }
   } else {
-    return { message: '이미 사용 중인 이메일이에요.' }
+    return { isUnique: false, message: '이미 사용 중인 이메일이에요.' }
   }
 }
 
