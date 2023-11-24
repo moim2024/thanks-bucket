@@ -1,38 +1,70 @@
 import { useState } from 'react'
 
-import { useNavigate } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-
-import { auth } from '@/remote/firebase'
+import { validateEmail, validatePassword } from '@/utils/validate'
+import useSignIn from '@/hooks/useSignIn'
+import { FormValues } from '@/models/auth'
 
 function SignInForm() {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
+  const [formValues, setFormValues] = useState({
     email: '',
     password: '',
   })
-  const [isError, setIsError] = useState<string | boolean>()
+  const [isTouched, setIsTouched] = useState({
+    email: false,
+    password: false,
+  })
+  const [submitError, setSubmitError] = useState({
+    isError: false,
+    message: '',
+  })
+
+  const handleSignIn = useSignIn({ setSubmitError })
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormValues((prevData) => ({
       ...prevData,
       [name]: value,
     }))
-    setIsError(false)
+
+    setSubmitError({
+      isError: false,
+      message: '',
+    })
   }
+
+  const checkValidate = (formValues: FormValues) => {
+    let errors: { [key: string]: { message: string } } = {}
+
+    if (formValues.email !== null) {
+      const result = validateEmail(formValues.email)
+      if (result) {
+        errors.email = result
+      }
+    }
+    if (formValues.password !== null) {
+      const result = validatePassword(formValues.password)
+      if (result) {
+        errors.password = result
+      }
+    }
+
+    return errors
+  }
+
+  const errors = checkValidate(formValues)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    try {
-      const { email, password } = formData
-      await signInWithEmailAndPassword(auth, email, password)
-      navigate('/buckets')
-    } catch (error: any) {
-      setIsError('존재하는 계정이 없거나 잘못된 비밀번호에요')
+    setIsTouched({
+      email: true,
+      password: true,
+    })
+    if (Object.keys(errors).length === 0) {
+      handleSignIn(formValues)
     }
   }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -46,6 +78,9 @@ function SignInForm() {
               onChange={handleInput}
             />
           </label>
+          {isTouched.email && errors.email && (
+            <span>{errors.email.message}</span>
+          )}
         </div>
         <div>
           <label>
@@ -57,8 +92,11 @@ function SignInForm() {
               onChange={handleInput}
             />
           </label>
+          {isTouched.password && errors.password && (
+            <span>{errors.password.message}</span>
+          )}
         </div>
-        {isError && <span>{isError}</span>}
+        {submitError.isError && <span>{submitError.message}</span>}
         <div>
           <button type="submit">로그인</button>
         </div>
