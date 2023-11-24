@@ -1,3 +1,6 @@
 export interface FormValues {
-  [key: string]: string
+  email: string
+  password: string
+  confirmPassword: string
+  nickname: string
 }
