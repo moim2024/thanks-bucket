@@ -1,12 +1,10 @@
-import { FormValues } from '@/models/auth'
-
 const REGEX = {
   NICKNAME: /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{1,8}$/,
   EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
   PASSWORD: /^.{8,}$/,
 }
 
-const validateNickname = (nickname: string) => {
+export const validateNickname = (nickname: string) => {
   const regex = REGEX.NICKNAME
   if (!nickname || !nickname.trim()) {
     return { message: '닉네임을 반드시 입력해주세요.' }
@@ -17,7 +15,7 @@ const validateNickname = (nickname: string) => {
   }
 }
 
-const validateEmail = (email: string) => {
+export const validateEmail = (email: string) => {
   const regex = REGEX.EMAIL
   if (!email || !email.trim()) {
     return { message: '이메일을 반드시 입력해주세요.' }
@@ -28,7 +26,7 @@ const validateEmail = (email: string) => {
   }
 }
 
-const validatePassword = (password: string) => {
+export const validatePassword = (password: string) => {
   const regex = REGEX.PASSWORD
   if (!password || !password.trim()) {
     return { message: '비밀번호를 반드시 입력해주세요.' }
@@ -39,7 +37,10 @@ const validatePassword = (password: string) => {
   }
 }
 
-const validatePasswordMatch = (password: string, confirmPassword?: string) => {
+export const validatePasswordMatch = (
+  password: string,
+  confirmPassword?: string,
+) => {
   if (!confirmPassword || !confirmPassword.trim()) {
     return { message: '비밀번호 확인을 반드시 입력해주세요.' }
   }
@@ -49,38 +50,4 @@ const validatePasswordMatch = (password: string, confirmPassword?: string) => {
   } else {
     return { isMathced: true, message: '비밀번호가 일치해요.' }
   }
-}
-
-export const checkValidate = (formValues: FormValues) => {
-  let errors: { [key: string]: { isMatched?: boolean; message: string } } = {}
-
-  if (formValues.email !== null) {
-    const result = validateEmail(formValues.email)
-    if (result) {
-      errors.email = result
-    }
-  }
-  if (formValues.password !== null) {
-    const result = validatePassword(formValues.password)
-    if (result) {
-      errors.password = result
-    }
-  }
-  if (formValues.confirmPassword !== null) {
-    const result = validatePasswordMatch(
-      formValues.password,
-      formValues.confirmPassword,
-    )
-    if (result) {
-      errors.confirmPassword = result
-    }
-  }
-  if (formValues.nickname !== null) {
-    const result = validateNickname(formValues.nickname)
-    if (result) {
-      errors.nickname = result
-    }
-  }
-
-  return errors
 }
