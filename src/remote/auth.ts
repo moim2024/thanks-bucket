@@ -16,15 +16,15 @@ import {
 import { auth, store } from './firebase'
 import { COLLECTIONS } from '@/constants'
 
-export const checkIsEmailUnique = async (inputEmail: string) => {
+export const validateEmailAvailable = async (inputEmail: string) => {
   const userRef = collection(store, COLLECTIONS.USER)
   const emailQuery = query(userRef, where('email', '==', inputEmail))
   const querySnapshot = await getDocs(emailQuery)
 
   if (querySnapshot.empty) {
-    return { isUnique: true, message: '사용할 수 있는 이메일이에요.' }
+    return { isAvailable: true, message: '사용할 수 있는 이메일이에요.' }
   } else {
-    return { isUnique: false, message: '이미 사용 중인 이메일이에요.' }
+    return { isAvailable: false, message: '이미 사용 중인 이메일이에요.' }
   }
 }
 

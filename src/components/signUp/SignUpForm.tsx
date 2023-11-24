@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { checkIsEmailUnique } from '@/remote/auth'
+import { validateEmailAvailable } from '@/remote/auth'
 import {
   validateEmail,
   validateNickname,
@@ -23,11 +23,11 @@ function SignUpForm() {
     confirmPassword: false,
     nickname: false,
   })
-  const [isEmailUnique, setIsEmailUnique] = useState({
-    isUnique: false,
+  const [emailStatus, setEmailStatus] = useState({
+    isAvailable: false,
     message: '',
   })
-  const [isCheckEmailUnique, setIsCheckEmailUnique] = useState(false)
+  const [isCheckEmailAvaliable, setIsCheckEmailAvaliable] = useState(false)
   const handleSignUp = useSignUp()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,10 @@ function SignUpForm() {
       ...prevData,
       [name]: value,
     }))
-    setIsCheckEmailUnique(false)
+
+    if (name === 'email' || emailStatus.isAvailable) {
+      setIsCheckEmailAvaliable(false)
+    }
   }
 
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,12 +88,11 @@ function SignUpForm() {
 
   const errors = checkValidate(formValues)
 
-  const checkEmailUnique = async () => {
+  const checkEmailAvaliable = async () => {
     try {
-      const email = formValues.email
-      const unique = await checkIsEmailUnique(email)
-      setIsEmailUnique(unique)
-      setIsCheckEmailUnique(true)
+      const available = await validateEmailAvailable(formValues.email)
+      setEmailStatus(available)
+      setIsCheckEmailAvaliable(true)
     } catch (error) {
       alert(error) // 추후 수정
     }
@@ -98,6 +100,21 @@ function SignUpForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsTouched({
+      email: true,
+      password: true,
+      confirmPassword: true,
+      nickname: true,
+    })
+    if (isCheckEmailAvaliable === false) {
+      alert('이메일 중복을 확인해주세요') // 추후 수정
+    }
+    if (
+      errors.confirmPassword.isMatched === false ||
+      emailStatus.isAvailable === false
+    ) {
+      return
+    }
     handleSignUp(formValues)
   }
 
@@ -118,11 +135,11 @@ function SignUpForm() {
           {isTouched.email && errors.email && (
             <span>{errors.email.message}</span>
           )}
-          <button type="button" onClick={checkEmailUnique}>
+          <button type="button" onClick={checkEmailAvaliable}>
             중복 확인
           </button>
-          {isTouched.email && !errors.email && isCheckEmailUnique && (
-            <span>{isEmailUnique.message}</span>
+          {isTouched.email && !errors.email && isCheckEmailAvaliable && (
+            <span>{emailStatus.message}</span>
           )}
         </div>
         <div>
@@ -173,10 +190,11 @@ function SignUpForm() {
 
         <button
           type="submit"
-          disabled={
-            errors.confirmPassword.isMatched === false ||
-            isEmailUnique.isUnique === false
-          }
+          // disabled={
+          //   errors.confirmPassword.isMatched === false ||
+          //   emailStatus.isAvailable === false ||
+          //   isCheckEmailAvaliable === false
+          // }
         >
           가입 완료
         </button>
