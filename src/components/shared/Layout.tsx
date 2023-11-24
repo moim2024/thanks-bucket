@@ -1,9 +1,10 @@
 import { Link, Outlet } from 'react-router-dom'
 import SignOut from './SignOut'
-import { useAuth } from '@/hooks/useAuth'
+import { useContext } from 'react'
+import { AuthContext } from '@/context/AuthProvider'
 
 function Layout() {
-  const { user } = useAuth()
+  const { user } = useContext(AuthContext)
   return (
     <>
       <nav>

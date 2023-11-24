@@ -1,13 +1,14 @@
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { onAuthStateChanged } from 'firebase/auth'
 
-import { useAuth } from '@/hooks/useAuth'
 import { auth } from '@/remote/firebase'
 import Loading from '../shared/Loading'
+import { AuthContext } from '@/context/AuthProvider'
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { initialized, setUser, setInitialized } = useAuth()
+  const { setUser } = useContext(AuthContext)
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
