@@ -27,7 +27,11 @@ function SignUpForm() {
     isAvailable: false,
     message: '',
   })
-  const [isCheckEmailAvaliable, setIsCheckEmailAvaliable] = useState(false)
+  const [clickEmailAvaliable, setClickEmailAvaliable] = useState({
+    isClick: false,
+    message: '',
+  })
+
   const handleSignUp = useSignUp()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +43,10 @@ function SignUpForm() {
     }))
 
     if (name === 'email' || emailStatus.isAvailable) {
-      setIsCheckEmailAvaliable(false)
+      setClickEmailAvaliable({
+        isClick: false,
+        message: '',
+      })
     }
   }
 
@@ -92,7 +99,10 @@ function SignUpForm() {
     try {
       const available = await validateEmailAvailable(formValues.email)
       setEmailStatus(available)
-      setIsCheckEmailAvaliable(true)
+      setClickEmailAvaliable((prevData) => ({
+        ...prevData,
+        isClick: true,
+      }))
     } catch (error) {
       alert(error) // 추후 수정
     }
@@ -106,16 +116,28 @@ function SignUpForm() {
       confirmPassword: true,
       nickname: true,
     })
-    if (isCheckEmailAvaliable === false) {
-      alert('이메일 중복을 확인해주세요') // 추후 수정
+
+    if (clickEmailAvaliable.isClick === false) {
+      setClickEmailAvaliable((prevData) => ({
+        ...prevData,
+        message: '이메일 중복을 확인해주세요.',
+      }))
+      return
     }
+    console.log(errors)
     if (
       errors.confirmPassword.isMatched === false ||
       emailStatus.isAvailable === false
     ) {
       return
     }
-    handleSignUp(formValues)
+
+    const isFormFilled = Object.values(formValues).every(
+      (value) => value !== '',
+    )
+    if (isFormFilled) {
+      handleSignUp(formValues)
+    }
   }
 
   return (
@@ -135,12 +157,20 @@ function SignUpForm() {
           {isTouched.email && errors.email && (
             <span>{errors.email.message}</span>
           )}
-          <button type="button" onClick={checkEmailAvaliable}>
+          <button
+            type="button"
+            onClick={checkEmailAvaliable}
+            disabled={!!errors.email}
+          >
             중복 확인
           </button>
-          {isTouched.email && !errors.email && isCheckEmailAvaliable && (
-            <span>{emailStatus.message}</span>
-          )}
+          {isTouched.email &&
+            !errors.email &&
+            (clickEmailAvaliable.isClick ? (
+              <span>{emailStatus.message}</span>
+            ) : (
+              <span>{clickEmailAvaliable.message}</span>
+            ))}
         </div>
         <div>
           <label>
@@ -153,6 +183,9 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
+          {formValues.password === '' && isTouched.password === false && (
+            <span>최소 8자 이상이여야해요.</span>
+          )}
           {isTouched.password && errors.password && (
             <span>{errors.password.message}</span>
           )}
@@ -183,21 +216,15 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
+          {formValues.nickname === '' && isTouched.nickname === false && (
+            <span>한글, 영어 대/소문자, 숫자로 최대 8자까지 가능해요.</span>
+          )}
           {isTouched.nickname && errors.nickname && (
             <span>{errors.nickname.message}</span>
           )}
         </div>
 
-        <button
-          type="submit"
-          // disabled={
-          //   errors.confirmPassword.isMatched === false ||
-          //   emailStatus.isAvailable === false ||
-          //   isCheckEmailAvaliable === false
-          // }
-        >
-          가입 완료
-        </button>
+        <button type="submit">가입 완료</button>
       </form>
     </>
   )

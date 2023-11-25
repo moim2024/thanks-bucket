@@ -11,7 +11,7 @@ function useSignUp() {
       await signUpWithEmail(email, password, nickname)
       navigate('/buckets')
     } catch (error) {
-      alert(error) // 추후 수정
+      console.error(error) // 추후 수정
     }
   }
   return handleSignUp
