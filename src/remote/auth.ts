@@ -1,6 +1,6 @@
 import { User, getRedirectResult } from 'firebase/auth'
 import { auth, store } from './firebase'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { COLLECTIONS } from '@/constants'
 
 export const getGoogleRedirectResult = async () => {
@@ -31,8 +31,6 @@ export const saveUserData = async (user: User) => {
 
     if (!userDoc.exists()) {
       await setDoc(userRef, userData)
-    } else {
-      await updateDoc(userRef, userData)
     }
   } catch (error) {
     console.error(error)
