@@ -20,7 +20,10 @@ function GoogleSignIn() {
   useEffect(() => {
     const getRedirectResult = async () => {
       try {
-        await getGoogleRedirectResult()
+        const result = await getGoogleRedirectResult()
+        if (result) {
+          navigate('/buckets')
+        }
       } catch (error) {
         alert('로그인을 다시 시도해 주세요.') // 변경 예정
       }
