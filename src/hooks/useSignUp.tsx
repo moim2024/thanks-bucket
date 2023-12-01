@@ -1,6 +1,7 @@
-import { FormValues } from '@/models/auth'
-import { signUpWithEmail } from '@/remote/auth'
 import { useNavigate } from 'react-router-dom'
+
+import { signUpWithEmail } from '@/remote/auth'
+import { FormValues } from '@/models/signup'
 
 function useSignUp() {
   const navigate = useNavigate()

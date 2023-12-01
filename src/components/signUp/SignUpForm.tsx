@@ -1,14 +1,8 @@
 import { useState } from 'react'
 
 import { validateEmailAvailable } from '@/remote/auth'
-import {
-  validateEmail,
-  validateNickname,
-  validatePassword,
-  validatePasswordMatch,
-} from '@/utils/validate'
+import { checkValidate } from '@/utils/validate'
 import useSignUp from '@/hooks/useSignUp'
-import { FormValues } from '@/models/auth'
 
 function SignUpForm() {
   const [formValues, setFormValues] = useState({
@@ -59,40 +53,6 @@ function SignUpForm() {
     }))
   }
 
-  const checkValidate = (formValues: FormValues) => {
-    let errors: { [key: string]: { isMatched?: boolean; message: string } } = {}
-
-    if (formValues.email !== null) {
-      const result = validateEmail(formValues.email)
-      if (result) {
-        errors.email = result
-      }
-    }
-    if (formValues.password !== null) {
-      const result = validatePassword(formValues.password)
-      if (result) {
-        errors.password = result
-      }
-    }
-    if (formValues.confirmPassword !== null) {
-      const result = validatePasswordMatch(
-        formValues.password,
-        formValues.confirmPassword,
-      )
-      if (result) {
-        errors.confirmPassword = result
-      }
-    }
-    if (formValues.nickname !== null) {
-      const result = validateNickname(formValues.nickname)
-      if (result) {
-        errors.nickname = result
-      }
-    }
-
-    return errors
-  }
-
   const errors = checkValidate(formValues)
 
   const checkEmailAvaliable = async () => {
@@ -126,18 +86,15 @@ function SignUpForm() {
     }
     console.log(errors)
     if (
+      errors.password ||
+      errors.nickname ||
       errors.confirmPassword.isMatched === false ||
       emailStatus.isAvailable === false
     ) {
       return
     }
 
-    const isFormFilled = Object.values(formValues).every(
-      (value) => value !== '',
-    )
-    if (isFormFilled) {
-      handleSignUp(formValues)
-    }
+    handleSignUp(formValues)
   }
 
   return (
@@ -183,9 +140,6 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
-          {formValues.password === '' && isTouched.password === false && (
-            <span>최소 8자 이상이여야해요.</span>
-          )}
           {isTouched.password && errors.password && (
             <span>{errors.password.message}</span>
           )}
@@ -216,9 +170,6 @@ function SignUpForm() {
               onBlur={handleBlur}
             />
           </label>
-          {formValues.nickname === '' && isTouched.nickname === false && (
-            <span>한글, 영어 대/소문자, 숫자로 최대 8자까지 가능해요.</span>
-          )}
           {isTouched.nickname && errors.nickname && (
             <span>{errors.nickname.message}</span>
           )}

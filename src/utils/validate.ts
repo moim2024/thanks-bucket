@@ -1,3 +1,5 @@
+import { FormValues } from '@/models/signup'
+
 const REGEX = {
   NICKNAME: /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{1,8}$/,
   EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
@@ -50,4 +52,38 @@ export const validatePasswordMatch = (
   } else {
     return { isMathced: true, message: '비밀번호가 일치해요.' }
   }
+}
+
+export const checkValidate = (formValues: FormValues) => {
+  let errors: { [key: string]: { isMatched?: boolean; message: string } } = {}
+
+  if (formValues.email !== null) {
+    const result = validateEmail(formValues.email)
+    if (result) {
+      errors.email = result
+    }
+  }
+  if (formValues.password !== null) {
+    const result = validatePassword(formValues.password)
+    if (result) {
+      errors.password = result
+    }
+  }
+  if (formValues.confirmPassword !== null) {
+    const result = validatePasswordMatch(
+      formValues.password,
+      formValues.confirmPassword,
+    )
+    if (result) {
+      errors.confirmPassword = result
+    }
+  }
+  if (formValues.nickname !== null) {
+    const result = validateNickname(formValues.nickname)
+    if (result) {
+      errors.nickname = result
+    }
+  }
+
+  return errors
 }
