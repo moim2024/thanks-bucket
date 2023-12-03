@@ -1,10 +1,11 @@
 import { Link, Outlet } from 'react-router-dom'
+
 import SignOut from './SignOut'
-import { useContext } from 'react'
-import { AuthContext } from '@/context/AuthProvider'
+import { useUser } from '@/hooks/useUser'
 
 function Layout() {
-  const { user } = useContext(AuthContext)
+  const user = useUser()
+
   return (
     <>
       <nav>
