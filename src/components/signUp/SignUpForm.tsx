@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { validateEmailAvailable } from '@/remote/auth'
+import { getUserByEmail } from '@/remote/auth'
 import { checkValidate } from '@/utils/validate'
 import useSignUp from '@/hooks/useSignUp'
 
@@ -18,14 +18,11 @@ function SignUpForm() {
     nickname: false,
   })
   const [emailStatus, setEmailStatus] = useState({
+    isDuplicatedCheck: false,
     isAvailable: false,
     message: '',
   })
-  const [clickEmailAvaliable, setClickEmailAvaliable] = useState({
-    isClick: false,
-    message: '',
-  })
-
+  const errors = checkValidate(formValues)
   const handleSignUp = useSignUp()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,10 +34,11 @@ function SignUpForm() {
     }))
 
     if (name === 'email' || emailStatus.isAvailable) {
-      setClickEmailAvaliable({
-        isClick: false,
+      setEmailStatus((prevData) => ({
+        ...prevData,
+        isDuplicatedCheck: false,
         message: '',
-      })
+      }))
     }
   }
 
@@ -53,18 +51,30 @@ function SignUpForm() {
     }))
   }
 
-  const errors = checkValidate(formValues)
-
-  const checkEmailAvaliable = async () => {
+  const checkEmailAvailable = async () => {
     try {
-      const available = await validateEmailAvailable(formValues.email)
-      setEmailStatus(available)
-      setClickEmailAvaliable((prevData) => ({
+      setEmailStatus((prevData) => ({
         ...prevData,
-        isClick: true,
+        isDuplicatedCheck: true,
       }))
+
+      const user = await getUserByEmail(formValues.email)
+
+      if (user) {
+        setEmailStatus((prevData) => ({
+          ...prevData,
+          isAvailable: false,
+          message: '이미 사용 중인 이메일이에요.',
+        }))
+      } else {
+        setEmailStatus((prevData) => ({
+          ...prevData,
+          isAvailable: true,
+          message: '사용할 수 있는 이메일이에요.',
+        }))
+      }
     } catch (error) {
-      alert(error) // 추후 수정
+      console.error(error) // 추후 수정
     }
   }
 
@@ -77,14 +87,14 @@ function SignUpForm() {
       nickname: true,
     })
 
-    if (clickEmailAvaliable.isClick === false) {
-      setClickEmailAvaliable((prevData) => ({
+    if (emailStatus.isDuplicatedCheck === false) {
+      setEmailStatus((prevData) => ({
         ...prevData,
         message: '이메일 중복을 확인해주세요.',
       }))
       return
     }
-    console.log(errors)
+
     if (
       errors.password ||
       errors.nickname ||
@@ -116,18 +126,14 @@ function SignUpForm() {
           )}
           <button
             type="button"
-            onClick={checkEmailAvaliable}
+            onClick={checkEmailAvailable}
             disabled={!!errors.email}
           >
             중복 확인
           </button>
-          {isTouched.email &&
-            !errors.email &&
-            (clickEmailAvaliable.isClick ? (
-              <span>{emailStatus.message}</span>
-            ) : (
-              <span>{clickEmailAvaliable.message}</span>
-            ))}
+          {isTouched.email && !errors.email && (
+            <span>{emailStatus.message}</span>
+          )}
         </div>
         <div>
           <label>

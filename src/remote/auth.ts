@@ -16,15 +16,15 @@ import {
 import { auth, store } from './firebase'
 import { COLLECTIONS } from '@/constants'
 
-export const validateEmailAvailable = async (inputEmail: string) => {
+export const getUserByEmail = async (email: string) => {
   const userRef = collection(store, COLLECTIONS.USER)
-  const emailQuery = query(userRef, where('email', '==', inputEmail))
+  const emailQuery = query(userRef, where('email', '==', email))
   const querySnapshot = await getDocs(emailQuery)
 
   if (querySnapshot.empty) {
-    return { isAvailable: true, message: '사용할 수 있는 이메일이에요.' }
+    return null
   } else {
-    return { isAvailable: false, message: '이미 사용 중인 이메일이에요.' }
+    return querySnapshot.docs[0].data()
   }
 }
 
@@ -48,7 +48,7 @@ export const saveUserData = async (user: User) => {
   const { uid, displayName, email, isAnonymous } = user
 
   const userData = {
-    displayName: displayName,
+    displayName,
     email: email ?? '',
     level: isAnonymous ? 0 : 1,
   }
