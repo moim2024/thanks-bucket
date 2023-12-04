@@ -1,5 +1,3 @@
-import { FormValues } from '@/models/signup'
-
 const REGEX = {
   NICKNAME: /^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]{1,8}$/,
   EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
