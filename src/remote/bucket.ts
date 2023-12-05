@@ -36,6 +36,5 @@ export const getBuckets = async (pageParam?: QuerySnapshot<Bucket>) => {
 }
 
 export const createBucket = (bucket: Bucket) => {
-  const bucketRef = collection(store, COLLECTIONS.BUCKET)
-  return addDoc(bucketRef, bucket)
+  return addDoc(collection(store, COLLECTIONS.BUCKET), bucket)
 }

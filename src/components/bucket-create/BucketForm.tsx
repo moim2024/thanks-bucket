@@ -3,21 +3,17 @@ import { useState } from 'react'
 import TodoForm from './TodoForm'
 import { BucketFormData } from '@/models/bucket'
 
-const defaultBucketFormData: BucketFormData = {
-  title: '',
-  category: '',
-  dueDate: '',
-  todos: [],
-}
-
 interface BucketFormProps {
   onSubmit: (value: BucketFormData) => void
 }
 
 function BucketForm({ onSubmit }: BucketFormProps) {
-  const [formData, setFormData] = useState<BucketFormData>(
-    defaultBucketFormData,
-  )
+  const [formData, setFormData] = useState<BucketFormData>({
+    title: '',
+    category: '',
+    dueDate: '',
+    todos: [],
+  })
 
   const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
