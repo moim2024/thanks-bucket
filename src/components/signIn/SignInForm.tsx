@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { validateEmail, validatePassword } from '@/utils/validate'
 import useSignIn from '@/hooks/useSignIn'
-import { FormValues } from '@/models/auth'
+import { FormValues } from '@/models/signIn'
 
 function SignInForm() {
   const [formValues, setFormValues] = useState({

@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
 import { auth } from '@/remote/firebase'
-import { FormValues } from '@/models/auth'
+import { FormValues } from '@/models/signIn'
 
 interface SignInProps {
   setSubmitError: React.Dispatch<
