@@ -8,6 +8,7 @@ import Layout from './components/shared/Layout'
 import HomePage from './pages/Home'
 import TestPage from './pages/Test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import SignUpPage from './pages/SignUp'
 import SignInPage from './pages/SignIn'
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <HomePage />,
+      },
+      {
+        path: 'signup',
+        element: <SignUpPage />,
       },
       {
         path: 'signin',
